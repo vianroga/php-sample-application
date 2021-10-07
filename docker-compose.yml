@@ -1,0 +1,36 @@
+version: '3.6'
+
+services:
+  mysql:
+    image: mysql:5.6
+    container_name: docker-mysql
+    environment:
+      MYSQL_DATABASE: sample
+      MYSQL_USER: sampleuser
+      MYSQL_PASSWORD: samplepass
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    restart: always
+    
+  web:
+    image: php:7.3-apache
+    container_name: docker-php
+    build:
+      context: .
+      dockerfile: Dockerfile.yml
+    ports:
+      - "80:80"
+    restart: always
+   # volumes:
+   #   - ./web:/var/www/html
+   # command: sh -c "make" 
+  #  links:
+  #   - "mysql:docker-mysql"
+  adminer:
+        image: adminer
+        restart: always
+        ports: 
+            - 8080:8080

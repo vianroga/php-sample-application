@@ -1,0 +1,38 @@
+FROM php:7.1-apache
+RUN mkdir /var/www/html/project
+WORKDIR /var/www/html/project
+COPY . .
+RUN mkdir project
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    wget \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip
+    
+RUN make
+#WORKDIR /var/www/html/
+#RUN chown -R $USER:$USER /var/www/html/web \
+#&& chown -R $USER:$USER /var/www/html/logs
+
+RUN chown -R www-data:www-data /var/www/html/project/web \
+&& chown -R www-data:www-data /var/www/html/project/logs
+
+#RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 777 /var/www/html/project \
+&& chmod -R 777 /var/www/html/project/logs
+#RUN echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+
+#VOLUME ./web /var/www/html
+COPY ./apache/archivo.conf /etc/apache2/sites-available/
+
+RUN a2enmod rewrite
+RUN a2ensite archivo.conf \
+&& a2dissite 000-default.conf
+#COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+#RUN service apache2 restart
+EXPOSE 80
+CMD ["apache2-foreground"]
