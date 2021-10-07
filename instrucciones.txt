@@ -1,0 +1,14 @@
+la app corre ubicandose en la carpeta principal del proyecto
+- sudo docker-compose up --force
+
+este comando levanta los siguientes contenedores:
+#Contiene la fuente del proyecto
+-docker-php
+
+#Este contiene la db mysql con el sql proporcionado inicializado
+-docker-mysql
+
+#Contiene una app para que instalé para validar la conexion con db 
+-adminer
+
+
